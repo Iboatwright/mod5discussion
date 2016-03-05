@@ -37,23 +37,31 @@ def fluffy_intro():
 
 
 def main_menu():
-    # Menu control options dict.
-    MENU_OPTIONS = {1: average_scores,0: exit_menu}
+    # Menu control options. A tuple with each entry a tuple of
+    #   [0] the display text and [1] the function to call.
+    MENU_OPTIONS = (('Exit',exit_menu),
+                    ('Average Test Scores', average_scores))
 
     # Initialize the program variables.
     # reset_vars(mainVars)
 
-    menuSelection = int(display_menu())
+    # menuSelection = int(display_menu())
 
-    while menuSelection in [1, 0]:
-        MENU_OPTIONS[menuSelection]()
+    # while menuSelection in [1, 0]:
+    while True:
+        display_menu(MENU_OPTIONS)
+        menuSelection = int(get_valid_inputs(['menu option', 'selection.']))
+        MENU_OPTIONS[menuSelection][1]()
 
     return None
 
 
-def display_menu():
-    print('Main Menu\n 1) Average Test Scores\n 0) Exit')
-    return get_valid_inputs(['menu option', 'selection.'])
+def display_menu(mOpts):
+    print('{0}\n{1:^40}\n{0}'.format('='*40,'Main Menu'))
+    for l in range(1,len(mOpts)):
+        print('  {0}) {1}'.format(l, mOpts[l][0]))
+    print('  {0}) {1}'.format(0, mOpts[0][0]))
+    return None
 
 
 # get_valid_inputs requests input from the user then tests the input.
@@ -127,6 +135,8 @@ class AverageIntegers:
     def __init__(self):
         self.iList = []
         self.iSum = 0
+        self.iAvg = 0
+        self.iAvgP = format(self.iAvg,)
 
     def add_integer(self,iNumber):
         self.iList.append(iNumber)
