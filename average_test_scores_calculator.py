@@ -41,21 +41,26 @@ def main_menu():
     #   [0] the display text and [1] the function to call.
     MENU_OPTIONS = (('Exit',exit_menu),
                     ('Average Test Scores', average_scores))
+    MENU_COUNT = len(MENU_OPTIONS)
+    # Initialize the loop control variable.
+    menuSelection = True
 
-    # Initialize the program variables.
-    # reset_vars(mainVars)
-
-    # menuSelection = int(display_menu())
-
-    # while menuSelection in [1, 0]:
-    while True:
+    # While menuSelection does not equal 0 (the default exit option.)
+    while menuSelection != 0:
         display_menu(MENU_OPTIONS)
-        menuSelection = int(get_valid_inputs(['menu option', 'selection.']))
+        # Calls the input request/validation function and converts the return
+        #   value into an integer.
+        menuSelection = int(get_valid_inputs([str(MENU_COUNT) +
+                                              ' menu options', 'selection.']))
+
+        # Use the validated user input to select the function reference and
+        #   execute the function with the trailing ().
         MENU_OPTIONS[menuSelection][1]()
 
+    # By design the exit_menu function runs before the while loop breaks.
     return None
 
-
+# todo: add comments
 def display_menu(mOpts):
     print('{0}\n{1:^40}\n{0}'.format('='*40,'Main Menu'))
     for l in range(1,len(mOpts)):
@@ -102,19 +107,23 @@ def prompt_user_for_input(promptTerm):
     # promptTerm is a local variable to hold the value passed from the
     #   calling module.
     print('Please enter your {}.'.format(promptTerm))
-    return input('  >> ')
+    return input('  >>> ')
 
 
 # test_value uses the testCondition to select the proper test.
 # It returns True or False to the calling Module.
 def test_value(testCondition, testItem):
     # The If-Then-Else structure functions as a Switch for test selection.
-    if testCondition == 'menu option':
-        # If float(testItem) is greater than or equal to zero True is
-        #  returned.  If float(testItem) creates an error or is less than
-        #  zero False is returned.
+    if testCondition[1:] == ' menu option':
+        # The number of menu items is prepended to the test condition string.
+        #   testCondition[1:] strips the first character and then does the
+        #   string comparison.
+        # If (the number of menu items) is greater than int(testItem) and
+        #   int(testItem) is greater than or equal to zero, True is
+        #   returned.  If int(testItem) creates an error or fails the other
+        #   logic tests, False is returned.
         try:
-            if int(testItem) == (0 or 1):
+            if int(testCondition[:1]) > int(testItem) >= 0:
                 return True
             else:
                 return False
@@ -130,7 +139,7 @@ def average_scores():
 
 def exit_menu():
     return 'end while'
-
+# fixme: <--- replace this class with functions --->
 class AverageIntegers:
     def __init__(self):
         self.iList = []
