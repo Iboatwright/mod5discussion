@@ -46,7 +46,7 @@ def main_menu():
     menuSelection = int(display_menu())
 
     while menuSelection in [1, 0]:
-        MENU_OPTIONS[menuSelection]
+        MENU_OPTIONS[menuSelection]()
 
     return None
 
@@ -123,7 +123,18 @@ def average_scores():
 def exit_menu():
     return 'end while'
 
+class AverageIntegers:
+    def __init__(self):
+        self.iList = []
+        self.iSum = 0
 
+    def add_integer(self,iNumber):
+        self.iList.append(iNumber)
+        self.iSum += iNumber
+        self.iAvg = self.iSum/len(self.iList)
+
+    def calc_average(self,iList):
+        return sum(iList)/len(iList)
 
 # display_results is passed values used in print statements to display
 #  the results of the program to the user.
