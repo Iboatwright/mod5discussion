@@ -57,8 +57,8 @@ def main_menu(customMenuOptions):
         # Calls the input request/validation function and converts the return
         #   value into an integer.  The number of menu elements is prepended
         #   to the input request and used as part of the validation testing.
-        menuSelection = int(get_valid_inputs([str(MENU_COUNT) +
-                                              ' menu options', 'selection.']))
+        menuSelection = int(get_valid_inputs([[str(MENU_COUNT) +
+                                              ' menu options', 'selection']]))
 
         # Use the validated user input to select the function reference and
         #   execute the function with the trailing ().
@@ -128,7 +128,7 @@ def prompt_user_for_input(promptTerm):
 # It returns True or False to the calling Module.
 def test_value(testCondition, testItem):
     # The If-Then-Else structure functions as a Switch for test selection.
-    if testCondition[1:] == ' menu option':
+    if testCondition[1:] == ' menu options':
         # The number of menu items is prepended to the test condition string.
         #   testCondition[1:] strips the first character and then does the
         #   string comparison.
@@ -137,7 +137,7 @@ def test_value(testCondition, testItem):
         #   returned.  If int(testItem) creates an error or fails the other
         #   logic tests, False is returned.
         try:
-            if int(testCondition[:1]) > int(testItem) >= 0:
+            if int(testItem) >= 0 and int(testCondition[:1]) > int(testItem):
                 return True
             else:
                 return False
@@ -165,10 +165,10 @@ def average_scores():
     return None
 
 
-def get_test_scores(scores):
+def get_test_scores(sList):
     print(page_header('Average Test Scores'))
-    print('Please enter each test score. After the last score is accepted'
-          'press the [Enter] key.  The average will then be displayed.')
+    print('Please enter each test score. After the last score is accepted')
+    print('press the [Enter] key.  The average will then be displayed.')
     while True:
         tmpScore = input('  Enter score: ')
         if len(tmpScore) == 0:
@@ -178,10 +178,10 @@ def get_test_scores(scores):
             else:
                 continue
         if tmpScore.isdigit():
-            scores['sList'].append(float(tmpScore))
+            sList.append(float(tmpScore))
         else:
             try:
-                scores['sList'].append(float(tmpScore))
+                sList.append(float(tmpScore))
             except:
                 print('Error: Invalid entry.  Only Real numbers accepted.')
                 continue
@@ -201,4 +201,7 @@ def display_results(count, avg):
     print(page_header('Average Test Scores'))
     print('You entered {0} scores.'.format(count))
     print('The average score is: {0}'.format(avg))
+    print('\n\n')
     return None
+
+main()
