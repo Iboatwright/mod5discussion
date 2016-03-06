@@ -20,7 +20,7 @@ def main():
     # End main.
     return None
 
-
+# fixme: <--- ? --->
 # reset_vars takes the mainVars dict by reference and sets/resets the
 #   program variables.
 def reset_vars(mainVars):
@@ -29,13 +29,21 @@ def reset_vars(mainVars):
     return None
 
 
+######## Misc Output ########
 # Displays an introduction to the program and describes what it does.
 def fluffy_intro():
-    print('\nWelcome to the Average Test Scores program.\n'
-          'This program requests a list of test scores, calculates\n'
+    print(page_header('Average Test Scores'))
+    print('Welcome! This program requests a list of test scores, calculates\n'
           'the average and then displays the results.\n')
 
 
+# Returns a string used to identify a new part(i.e. page) of the program.
+def page_header(title):
+    return '{0}\n{1:^40}\n{0}'.format('='*40,title)
+
+
+# Section Block: Menu ------------------------------------------------------->
+# todo: add comments
 def main_menu():
     # Menu control options. A tuple with each entry a tuple of
     #   [0] the display text and [1] the function to call.
@@ -60,6 +68,7 @@ def main_menu():
     # By design the exit_menu function runs before the while loop breaks.
     return None
 
+
 # todo: add comments
 def display_menu(mOpts):
     print('{0}\n{1:^40}\n{0}'.format('='*40,'Main Menu'))
@@ -68,6 +77,12 @@ def display_menu(mOpts):
     print('  {0}) {1}'.format(0, mOpts[0][0]))
     return None
 
+
+def exit_menu():
+    return 'end while'
+
+
+# Section Block: Input Validation ------------------------------------------->
 
 # get_valid_inputs requests input from the user then tests the input.
 #   If invalid, it will alert the user and request the correct input.
@@ -133,12 +148,17 @@ def test_value(testCondition, testItem):
         return None
 
 
+# Section Block: Average Test Scores ---------------------------------------->
 def average_scores():
-    menuSelection = 1
-    return menuSelection
+    scores = {
+        'sCount': 1,
+        'sList': [],
+        'sSum': 0,
+        'sAvg': 0.0,
+        'sAvgP': 0
+    }
+    return None
 
-def exit_menu():
-    return 'end while'
 # fixme: <--- replace this class with functions --->
 class AverageIntegers:
     def __init__(self):
