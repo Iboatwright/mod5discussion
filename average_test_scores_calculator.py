@@ -10,26 +10,23 @@
 # March x, 2016
 
 def main():
+    # Menu control options passed to the menu function.  A list with each
+    #   entry a tuple of [0] the display text and [1] the function to call.
+    #   Menu numbers start at 1), option 0) defaults to Exit.
+    customMenuOptions = [('Average Test Scores', average_scores)]
+
     # Displays the intro to user.
     fluffy_intro()
 
     # Call the menu loop program.  The menu options are: 1) Average Test
-    #   Scores and 2) Exit the program.
-    main_menu()
+    #   Scores and 0) Exit the program.
+    main_menu(customMenuOptions)
 
     # End main.
     return None
 
-# fixme: <--- ? --->
-# reset_vars takes the mainVars dict by reference and sets/resets the
-#   program variables.
-def reset_vars(mainVars):
-    mainVars['menuOptions'] = {'averageScores','exit'}
-    mainVars['scores'] = {}
-    return None
 
-
-######## Misc Output ########
+# Section Block: Misc Output ------------------------------------------------>
 # Displays an introduction to the program and describes what it does.
 def fluffy_intro():
     print(page_header('Average Test Scores'))
@@ -43,27 +40,29 @@ def page_header(title):
 
 
 # Section Block: Menu ------------------------------------------------------->
-# todo: add comments
-def main_menu():
-    # Menu control options. A tuple with each entry a tuple of
+# todo: add more comments
+def main_menu(customMenuOptions):
+    # Menu control options. A list with each entry a tuple of
     #   [0] the display text and [1] the function to call.
-    MENU_OPTIONS = (('Exit',exit_menu),
-                    ('Average Test Scores', average_scores))
-    MENU_COUNT = len(MENU_OPTIONS)
+    menuOptions = [('Exit',exit_menu)]  # Set default menu options.
+    menuOptions.extend(customMenuOptions)  # Add custom menu options.
+    MENU_COUNT = len(menuOptions)
+
     # Initialize the loop control variable.
     menuSelection = True
 
     # While menuSelection does not equal 0 (the default exit option.)
     while menuSelection != 0:
-        display_menu(MENU_OPTIONS)
+        display_menu(menuOptions)
         # Calls the input request/validation function and converts the return
-        #   value into an integer.
+        #   value into an integer.  The number of menu elements is prepended
+        #   to the input request and used as part of the validation testing.
         menuSelection = int(get_valid_inputs([str(MENU_COUNT) +
                                               ' menu options', 'selection.']))
 
         # Use the validated user input to select the function reference and
         #   execute the function with the trailing ().
-        MENU_OPTIONS[menuSelection][1]()
+        menuOptions[menuSelection][1]()
 
     # By design the exit_menu function runs before the while loop breaks.
     return None
@@ -71,7 +70,7 @@ def main_menu():
 
 # todo: add comments
 def display_menu(mOpts):
-    print('{0}\n{1:^40}\n{0}'.format('='*40,'Main Menu'))
+    print(page_header('Main Menu'))
     for l in range(1,len(mOpts)):
         print('  {0}) {1}'.format(l, mOpts[l][0]))
     print('  {0}) {1}'.format(0, mOpts[0][0]))
@@ -155,28 +154,51 @@ def average_scores():
         'sList': [],
         'sSum': 0,
         'sAvg': 0.0,
-        'sAvgP': 0
     }
+
+    get_test_scores(scores['sList'])
+    scores['sSum'] = sum(scores['sList'])
+    scores['sCount'] = len(scores['sList'])
+    scores['sAvg'] = calc_average(scores['sSum'],scores['sCount'])
+
+    display_results(scores['sCount'],scores['sAvg'])
     return None
 
-# fixme: <--- replace this class with functions --->
-class AverageIntegers:
-    def __init__(self):
-        self.iList = []
-        self.iSum = 0
-        self.iAvg = 0
-        self.iAvgP = format(self.iAvg,)
 
-    def add_integer(self,iNumber):
-        self.iList.append(iNumber)
-        self.iSum += iNumber
-        self.iAvg = self.iSum/len(self.iList)
+def get_test_scores(scores):
+    print(page_header('Average Test Scores'))
+    print('Please enter each test score. After the last score is accepted'
+          'press the [Enter] key.  The average will then be displayed.')
+    while True:
+        tmpScore = input('  Enter score: ')
+        if len(tmpScore) == 0:
+            verifyLast = input('Finished entering scores? (y)es/no\n >>> ')
+            if verifyLast.lower() in ['','y','yes']:
+                break
+            else:
+                continue
+        if tmpScore.isdigit():
+            scores['sList'].append(float(tmpScore))
+        else:
+            try:
+                scores['sList'].append(float(tmpScore))
+            except:
+                print('Error: Invalid entry.  Only Real numbers accepted.')
+                continue
+    return None
 
-    def calc_average(self,iList):
-        return sum(iList)/len(iList)
+def calc_average(sum, count, precision=2):
+    avg = round(sum / count, precision)
+    if sum % count == 0:
+        avg = int(avg)
+    return avg
+
 
 # display_results is passed values used in print statements to display
 #  the results of the program to the user.
-def display_results(mCosts):
+def display_results(count, avg):
     #
+    print(page_header('Average Test Scores'))
+    print('You entered {0} scores.'.format(count))
+    print('The average score is: {0}'.format(avg))
     return None
