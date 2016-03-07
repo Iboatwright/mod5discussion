@@ -7,7 +7,7 @@
 #   scores/repeat the program.
 #
 # Ivan Boatwright
-# March x, 2016
+# March 7, 2016
 
 def main():
     # Menu control options passed to the menu function.  A list with each
@@ -27,6 +27,7 @@ def main():
 
 
 # Section Block: Misc Output ------------------------------------------------>
+
 # Displays an introduction to the program and describes what it does.
 def fluffy_intro():
     print(page_header('Average Test Scores'))
@@ -40,7 +41,12 @@ def page_header(title):
 
 
 # Section Block: Menu ------------------------------------------------------->
-# todo: add more comments
+
+# main_menu prints a list of options for the user to select from.  The user
+#   enters the desired option's number and the function paired with that
+#   option is then executed.  If that option is 0 the while loop is terminated
+#   and control returns to the calling function.  Otherwise after the selected
+#   function is finished main menu is displayed again.
 def main_menu(customMenuOptions):
     # Menu control options. A list with each entry a tuple of
     #   [0] the display text and [1] the function to call.
@@ -62,23 +68,29 @@ def main_menu(customMenuOptions):
 
         # Use the validated user input to select the function reference and
         #   execute the function with the trailing ().
-        menuOptions[menuSelection][1]()
+        menuSelection = menuOptions[menuSelection][1]()
 
     # By design the exit_menu function runs before the while loop breaks.
     return None
 
 
-# todo: add comments
+# Prints the menu header and menu options to stdout.  The menuOptions list
+#   is the parameter and used to generate the option strings.
 def display_menu(mOpts):
     print(page_header('Main Menu'))
+    # This loops through the list starting at [1] and prints [0] (Exit)
+    #   at the end.
     for l in range(1,len(mOpts)):
         print('  {0}) {1}'.format(l, mOpts[l][0]))
     print('  {0}) {1}'.format(0, mOpts[0][0]))
     return None
 
 
+# Sets the loop control variable to 0 which ends the while loop.
 def exit_menu():
-    return 'end while'
+    # "Until we meet again, farewell."
+    print("\nJusqu'à ce que nous nous reverrons, adieu.")
+    return 0
 
 
 # Section Block: Input Validation ------------------------------------------->
@@ -148,7 +160,12 @@ def test_value(testCondition, testItem):
 
 
 # Section Block: Average Test Scores ---------------------------------------->
+
+# This is the primary Average Test Scores function.  When control is returned
+#   to the main menu this function and all of it's variables pass out of scope
+#   If Average Test Scores is repeated the variables are effectively reset.
 def average_scores():
+    # Local variables Dict.
     scores = {
         'sCount': 1,
         'sList': [],
@@ -165,21 +182,34 @@ def average_scores():
     return None
 
 
+# Uses a list by reference to store the requested values.  When the user enters
+#   a blank entry the loop verifies if all scores are entered.  If not the user
+#   can continue entering scores, otherwise control is returned to
+#   average_scores.  Each entry is validated before being stored in sList.
 def get_test_scores(sList):
     print(page_header('Average Test Scores'))
     print('Please enter each test score. After the last score is accepted')
     print('press the [Enter] key.  The average will then be displayed.')
     while True:
         tmpScore = input('  Enter score: ')
+        # A length of 0 means input returned '', an empty string. i.e. the user
+        #   pressed [Enter].
         if len(tmpScore) == 0:
             verifyLast = input('Finished entering scores? (y)es/no\n >>> ')
+            # By checking for '' here the user is spared having to type
+            #   y or yes and can just hit [Enter] again.
             if verifyLast.lower() in ['','y','yes']:
+                # Break will end the while True loop immediately.
                 break
             else:
+                # Continue skips the rest of the code in the while loop and
+                #   initiates another iteration.
                 continue
         if tmpScore.isdigit():
             sList.append(float(tmpScore))
         else:
+            # If tmpScore cannot be converted to a float this catches the
+            #   error message and instead executes the except clause.
             try:
                 sList.append(float(tmpScore))
             except:
@@ -187,6 +217,10 @@ def get_test_scores(sList):
                 continue
     return None
 
+
+# Calculates the average of two numbers and return the value.  Optionally
+#   specify how many decimal places are returned.  If there is no fractional
+#   component, the value is converted to an integer and returned.
 def calc_average(sum, count, precision=2):
     avg = round(sum / count, precision)
     if sum % count == 0:
@@ -197,11 +231,12 @@ def calc_average(sum, count, precision=2):
 # display_results is passed values used in print statements to display
 #  the results of the program to the user.
 def display_results(count, avg):
-    #
     print(page_header('Average Test Scores'))
     print('You entered {0} scores.'.format(count))
     print('The average score is: {0}'.format(avg))
     print('\n\n')
     return None
 
+
+# Start the program
 main()
